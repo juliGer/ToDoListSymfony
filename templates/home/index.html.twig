@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block stylesheets %} 
+	{{ parent() }}
+	<link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+{% block nav %} {{ parent() }} {% endblock %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+					<h3  class="text-center h1Margin-Top10">To-Do List</h3>
+					<!-- Material input -->
+					<br>
+					<div class="text-center container">
+						<div class="row">
+							<div class="col-md-4">
+								<button type="button" onclick="window.location.href='{{ path("home",{"filtro": "s"}) }}'" class="btn btn-outline-success btn-sm">Success: {{ countSuccess }} </button>			
+							</div>
+							<div class="col-md-4">		
+								<button type="button" onclick="window.location.href='{{ path("home",{"filtro": "p"}) }}'" class="btn btn-outline-info btn-sm">Pending: {{ countPending }} </button>		
+							</div>
+							<div class="col-md-4">	
+								<button type="button" onclick="window.location.href='{{ path("home",{"filtro": "d"}) }}'" class="btn btn-outline-danger btn-sm">Deleted: {{ countDeleted }} </button>	
+							</div>													
+						</div>
+					</div>
+					<br>
+					<form class="text-center">
+						<input  type="text"  placeholder="Add Task" >
+						<button type="submit" class="btn"><i class="fa fa-plus"></i></button>
+					</form>
+					<div style="margin-left: 2%;" class="text-center list-group">
+					<div class="container">
+					{% for item in items %}
+						<div class="row">
+							<div class="col-md-3">
+							  <a class="list-group-item-action">
+							    {{item.name}}
+							  </a>								
+							</div>
+							<div class="col-md-3">
+								<input type="checkbox" name="checkbox" {% if item.checked == 1 %} checked {% endif %} onclick="check({{ item.checked }},{{ item.id }})">
+							</div>
+							<div class="col-md-3">
+								<button type="submit" class="btn"><i class="fa fa-eye"></i></button>
+							</div>
+							<div class="col-md-3">
+								<button type="submit" class="btn"><i class="fa fa-trash"></i></button>
+							</div>													
+						</div>
+					{% endfor %}									
+					</div>
+
+					</div>
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center">
+				    <li class="page-item">
+				      <a class="page-link" href="#" tabindex="-1">Previous</a>
+				    </li>
+				    <li class="page-item"><a class="page-link" href="#">1</a></li>
+				    <li class="page-item"><a class="page-link" href="#">2</a></li>
+				    <li class="page-item"><a class="page-link" href="#">3</a></li>
+				    <li class="page-item">
+				      <a class="page-link" href="#">Next</a>
+				    </li>
+				  </ul>					
+				 </nav>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+	</div>
+	<br>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+	<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+ 
+	<script>
+		function check(value,id){
+			var Ruta = Routing.generate('checked');
+			$.ajax({
+				type:"POST",
+				url:Ruta,
+				dataType:'json',
+				async:true,
+				data:{
+					"check": value,
+					"id": id
+				},
+				success:function(respuesta){
+					console.log(respuesta);
+				},
+				error: function(){
+					console.log("No se ha podido obtener la información");
+				}
+			})
+		}
+	</script>
+	
+
+{% endblock %}
