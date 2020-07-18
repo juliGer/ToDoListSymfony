@@ -51,7 +51,7 @@
 								<button type="submit" class="btn"><i class="fa fa-eye"></i></button>
 							</div>
 							<div class="col-md-3">
-								<button type="submit" class="btn"><i class="fa fa-trash"></i></button>
+								<button type="submit" onclick="window.location.href='{{ path("delete",{"id": item.id,"filtro": app.request.get('filtro')}) }}'" class="btn"><i class="fa fa-trash"></i></button>
 							</div>													
 						</div>
 					{% endfor %}									

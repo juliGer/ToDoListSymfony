@@ -58,7 +58,6 @@ class HomeController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $check = $request->request->get('check');
         $id = $request->request->get('id');
-        var_dump($id);
         $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
         if ($check == 1) {
           $item->setChecked(0);
@@ -69,6 +68,26 @@ class HomeController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
         return new JsonResponse(['item'=>$check]);          
+    }
+
+    /**                                                                                   
+    * @Route("/delete",
+    * options = { "expose" = true}, 
+    * name = "delete",
+    * )
+    * @method({"GET"})
+    */
+    public function delete(Request $request)    
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $id = $request->query->get('id');
+        
+        $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
+      
+        $item->setChecked(2);
+        $entityManager->persist($item);
+        $entityManager->flush();
+        return $this->home($request);         
     }
 }
 
