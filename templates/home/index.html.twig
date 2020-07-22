@@ -48,10 +48,10 @@
 								<input type="checkbox" name="checkbox" {% if item.checked == 1 %} checked {% endif %} onclick="check({{ item.checked }},{{ item.id }})">
 							</div>
 							<div class="col-md-3">
-								<button type="submit" class="btn"><i class="fa fa-eye"></i></button>
+								<button onclick="functionForm({{item.id}})" class="btn"><i class="fa fa-eye"></i></button>
 							</div>
 							<div class="col-md-3">
-								<button type="submit" onclick="window.location.href='{{ path("delete",{"id": item.id,"filtro": app.request.get('filtro')}) }}'" class="btn"><i class="fa fa-trash"></i></button>
+								<button onclick="window.location.href='{{ path("delete",{"id": item.id,"filtro": app.request.get('filtro')}) }}'" class="btn"><i class="fa fa-trash"></i></button>
 							</div>													
 						</div>
 					{% endfor %}									
@@ -75,6 +75,24 @@
 			<div class="col-md-3"></div>
 		</div>
 	</div>
+	<div class="popup">
+		<div class="popup-content text-center">
+			<img class="transformLogoForm" width="55" src="{{ asset('images/logo.png') }}">
+			<h1 class="h1Popup">Edit</h1>
+			<form>
+				<div class="form-group">
+					<i class="fa fa-tasks" aria-hidden="true"></i>
+			    	<input type="text" id="Name" placeholder="Name">
+				</div>
+				<div class="form-group">
+					<i class="fa fa-check" aria-hidden="true"></i>
+					<input type="password" id="exampleInputPassword1" placeholder="Status">
+				</div>
+				<button type="submit" class="btn btn-primary transform">Edit</button>
+			</form>
+			<button type="submit" id="close" class="btn btn-danger botonClose"><i  class="fa fa-times"></i></button>
+		</div>
+	</div>
 	<br>
 {% endblock %}
 {% block javascripts %}
@@ -83,6 +101,30 @@
 	<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
  
 	<script>
+		function functionForm(id){
+			document.querySelector(".popup").style.display = "flex";
+			var Ruta = Routing.generate('edit');
+			$.ajax({
+				type:"POST",
+				url:Ruta,
+				dataType:'json',
+				async:true,
+				data:{
+					"id": id
+				},
+				success:function(respuesta){
+					document.getElementById("Name").value = respuesta.name;
+				},
+				error: function(){
+					console.log("No se ha podido obtener la información");
+				}
+			})
+		}
+
+		document.getElementById("close").addEventListener("click",function(){
+			document.querySelector(".popup").style.display = "none";
+		})
+
 		function check(value,id){
 			var Ruta = Routing.generate('checked');
 			$.ajax({

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="main")
+     * @Route("/main", name="main")
      */
     public function index()
     {

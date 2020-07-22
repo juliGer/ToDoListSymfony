@@ -1,4 +1,4 @@
-input {
+.col-md-6 input {
   margin-bottom: 5vh;
   border-right: none;
   border-top: none;
@@ -107,4 +107,53 @@ footer p{
 
 .bg-dark {
     background-color: #37474F!important;
+}
+
+.popup{
+  background: rgb(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content{
+  height: 0.5px;
+  width: 500px;
+  background: #fff;
+  padding: 250px;
+  border-radius: 5px;
+  position: relative;
+  border: 2px solid #37474f !important;
+}
+
+.h1Popup{
+  transform: translate(-45px,-170px);
+}
+
+.fa-times{
+  color:white;
+  
+}
+
+.botonClose{
+  position: absolute;
+  top: -15px;
+  right: -15px;
+}
+
+.form-group{
+  transform: translate(-180px,-150px);
+  width: 350px;
+}
+
+.transform{
+  transform: translate(-36px,-100px)
+}
+
+.transformLogoForm{
+ transform: translate(-37px,-180px) 
 }

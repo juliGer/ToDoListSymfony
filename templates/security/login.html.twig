@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block stylesheets %} 
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+{% block nav %} 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+          <a class="navbar-brand" href="#"> <img width="40" src="{{ asset('images/logo.png') }}">
+      ListX</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+{% endblock %}
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-xl-7 text-left">
+                <h1 style="font-size : 1.5cm;" >Organize everything with ListX</h1>
+                <p>ListX is an application used to keep tasks organized</p>
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </div>
+            <div class="col-xl-5">
+                <div class="shadow-lg p-3 mb-5 bg-white rounded">
+                    <div class="card-body">
+                        <form method="post">
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+
+                            {% if app.user %}
+                                <div class="mb-3">
+                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                </div>
+                            {% endif %}
+                            <img width="55" src="{{ asset('images/logo.png') }}">
+                            <h1>Login</h1>
+                        
+                            <div class="form-group">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" autofocus="" required="">
+                            </div>
+                            <div class="form-group">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                    <input type="password" name="password" id="inputPassword" required placeholder="Password">
+
+                                    <input type="hidden" name="_csrf_token"
+                                           value="{{ csrf_token('authenticate') }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>                 
+                    </div>
+                </div>              
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
