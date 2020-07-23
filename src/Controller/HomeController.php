@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Item;
+use App\Form\ItemType;
 
 class HomeController extends AbstractController
 {
@@ -26,69 +27,41 @@ class HomeController extends AbstractController
     	$countSuccess=$this->getDoctrine()->getRepository(Item::class)->findCountSuccess();
       $countPending=$this->getDoctrine()->getRepository(Item::class)->findCountPending();    
       $countDeleted=$this->getDoctrine()->getRepository(Item::class)->findCountDeleted();  
-      
+
+      $item = new Item();
+      $form = $this->createForm(ItemType::class,$item);
+      $form->handleRequest($request);
+      if($form->isSubmitted() && $form->isValid()){        
+        $entityManager = $this->getDoctrine()->getManager();
+        $id = $form->get('id')->getData();
+        $item = $this->getDoctrine()->getRepository(Item::class)->find($id); 
+        $name = $form->get('name')->getData();
+        $item = $item ->setName($name);
+        $entityManager->persist($item);
+        $entityManager->flush();
+        return $this->redirectToRoute('home');
+      }
       if($request->query->has('filtro')){
         $filtro=$request->query->get('filtro');
         switch ($filtro) {
           case "s":
-            return $this->render('home/index.html.twig', array('items' => $success,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant']));    	          break;
+            return $this->render('home/index.html.twig', array('items' => $success,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant'],"form" => $form->createView()));    	          break;
           case "p":
-            return $this->render('home/index.html.twig', array('items' => $pending,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant']));   
+            return $this->render('home/index.html.twig', array('items' => $pending,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant'],"form" => $form->createView()));   
           break;
           case "d":
-            return $this->render('home/index.html.twig', array('items' => $deleted,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant']));    	
+            return $this->render('home/index.html.twig', array('items' => $deleted,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant'],"form" => $form->createView()));    	
           break;
 
       } 
       } else{
-        return $this->render('home/index.html.twig', array('items' => $success,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant']));   
+        return $this->render('home/index.html.twig', array('items' => $success,'success' => $success, 'pending' => $pending , 'deleted' => $deleted , 'countPending' => $countPending[0]['cant'] ,'countSuccess'=> $countSuccess[0]['cant'] ,'countDeleted'=> $countDeleted[0]['cant'],"form" => $form->createView()));   
     }
     
   }
     
-    /**                                                                                   
-    * @Route("/ajax",
-    * options = { "expose" = true}, 
-    * name = "checked",
-    * )
-    * @method({"POST"})
-    */
-    public function ajaxAction(Request $request)    
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $check = $request->request->get('check');
-        $id = $request->request->get('id');
-        $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
-        if ($check == 1) {
-          $item->setChecked(0);
-        }elseif ($check == 0) {
-          $item->setChecked(1);
-        }
-        $entityManager->persist($item);
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-        return new JsonResponse(['item'=>$check]);          
-    }
 
-    /**                                                                                   
-    * @Route("/delete",
-    * options = { "expose" = true}, 
-    * name = "delete",
-    * )
-    * @method({"GET"})
-    */
-    public function delete(Request $request)    
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $id = $request->query->get('id');
-        
-        $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
-      
-        $item->setChecked(2);
-        $entityManager->persist($item);
-        $entityManager->flush();
-        return $this->home($request);         
-    }
+
 }
 
 ?>

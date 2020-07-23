@@ -22,16 +22,6 @@ html,body{
 	border: 2px solid #37474F;
 }
 
-input[type=text]{
-  margin-bottom: 5vh;
-  border-right: none;
-  border-top: none;
-  border-left: none;
-  background-color:transparent;
-  outline: none;
-  color: black;
-  border-color: #37474F;
-}
 
 input[type=checkbox]{
 	margin-left: 0px !important;
@@ -121,18 +111,23 @@ footer p{
 }
 
 .popup-content{
-  height: 0.5px;
-  width: 500px;
-  background: #fff;
-  padding: 250px;
-  border-radius: 5px;
+  background-color: #fefefe;
+  text-align: center;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
   position: relative;
-  border: 2px solid #37474f !important;
 }
 
-.h1Popup{
-  transform: translate(-45px,-170px);
+.popup-content label{
+  display: inherit;
 }
+
+input[readonly] {
+    color:#828282 ;
+}
+
 
 .fa-times{
   color:white;
@@ -143,17 +138,4 @@ footer p{
   position: absolute;
   top: -15px;
   right: -15px;
-}
-
-.form-group{
-  transform: translate(-180px,-150px);
-  width: 350px;
-}
-
-.transform{
-  transform: translate(-36px,-100px)
-}
-
-.transformLogoForm{
- transform: translate(-37px,-180px) 
 }
