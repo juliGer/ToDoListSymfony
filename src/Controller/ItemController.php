@@ -35,10 +35,10 @@ class ItemController extends AbstractController
         $check = $request->request->get('check');
         $id = $request->request->get('id');
         $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
-        if ($check == 1) {
-          $item->setChecked(0);
-        }elseif ($check == 0) {
-          $item->setChecked(1);
+        if ($check == "success") {
+          $item->setChecked("pending");
+        }elseif ($check == "pending") {
+          $item->setChecked("success");
         }
         $entityManager->persist($item);
         // actually executes the queries (i.e. the INSERT query)
@@ -57,13 +57,13 @@ class ItemController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $id = $request->query->get('id');
-        
+        $filtro = $request->query->get('filtro');
         $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
       
-        $item->setChecked(2);
+        $item->setChecked("deleted");
         $entityManager->persist($item);
         $entityManager->flush();
-        return $this->home($request);         
+        return $this->redirect($this->generateUrl('home', array('filtro' => $filtro)));        
     }
         /**                                                                                   
     * @Route("/edit",
@@ -95,5 +95,25 @@ class ItemController extends AbstractController
         
         $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
         return new JsonResponse(['name'=>$item->getName(),'status'=>$item->getChecked()]);  
+    }
+
+    /**                                                                                   
+    * @Route("/addItem",
+    * options = { "expose" = true}, 
+    * name = "addItem",
+    * )
+    * @method({"POST"})
+    */
+    public function addItem(Request $request)    
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $item = new Item();
+        $name = $request->request->get('name');
+        $item->setName($name);
+        $item->setChecked('pending');
+        $entityManager->persist($item);
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+        return new JsonResponse(['item'=>$item]);          
     }
 }

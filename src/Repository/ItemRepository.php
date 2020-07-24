@@ -28,9 +28,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT i
+            "SELECT i
             FROM App\Entity\Item i
-            WHERE i.checked = 1');
+            WHERE i.checked = 'success'");
 
         // returns an array of Product objects
         return $query->getResult();
@@ -44,9 +44,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT i
+            "SELECT i
             FROM App\Entity\Item i
-            WHERE i.checked = 0');
+            WHERE i.checked = 'pending'");
 
         // returns an array of Product objects
         return $query->getResult();
@@ -60,9 +60,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT i
+            "SELECT i
             FROM App\Entity\Item i
-            WHERE i.checked = 2');
+            WHERE i.checked = 'deleted'");
 
         // returns an array of Product objects
         return $query->getResult();
@@ -76,9 +76,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT COUNT(i.id) as cant
+            "SELECT COUNT(i.id) as cant
             FROM App\Entity\Item i
-            WHERE i.checked = 1');
+            WHERE i.checked = 'success'");
 
         // returns an array of Product objects
         return $query->getResult();
@@ -92,9 +92,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT COUNT(i.id) as cant
+            "SELECT COUNT(i.id) as cant
             FROM App\Entity\Item i
-            WHERE i.checked = 0');
+            WHERE i.checked = 'pending'");
 
         // returns an array of Product objects
         return $query->getResult();
@@ -108,9 +108,9 @@ class ItemRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT COUNT(i.id) as cant
+            "SELECT COUNT(i.id) as cant
             FROM App\Entity\Item i
-            WHERE i.checked = 2');
+            WHERE i.checked = 'deleted'");
 
         // returns an array of Product objects
         return $query->getResult();

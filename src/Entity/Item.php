@@ -23,7 +23,7 @@ class Item
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="string", length=11)
      */
     private $checked;
 
@@ -44,12 +44,12 @@ class Item
         return $this;
     }
 
-    public function getChecked(): ?int
+    public function getChecked(): ?string
     {
         return $this->checked;
     }
 
-    public function setChecked(int $checked): self
+    public function setChecked(string $checked): self
     {
         $this->checked = $checked;
 

@@ -35,10 +35,10 @@
 						</div>
 					</div>
 					<br>
-					<form class="text-center">
-						<input  type="text"  placeholder="Add Task" >
-						<button type="submit" class="btn"><i class="fa fa-plus"></i></button>
-					</form>
+					<div class="text-center">
+						<input  type="text" id="search" placeholder="Add Task" >
+						<button type="button" onclick="prueba()" class="btn"><i class="fa fa-plus"></i></button>
+					</div>
 					<div style="margin-left: 2%;" class="text-center list-group">
 					<div class="container">
 					{% for item in items %}
@@ -49,7 +49,7 @@
 							  </a>								
 							</div>
 							<div class="col-md-3">
-								<input type="checkbox" name="checkbox" {% if item.checked == 1 %} checked {% endif %} onclick="check({{ item.checked }},{{ item.id }})">
+								<input type="checkbox" name="checkbox" {% if item.checked == "success" %} checked {% endif %} onclick="check('{{ item.checked }}',{{ item.id }})">
 							</div>
 							<div class="col-md-3">
 								<button onclick="functionForm({{item.id}})" class="btn"><i class="fa fa-eye"></i></button>
@@ -92,7 +92,29 @@
 	{{ parent() }}
 	<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
 	<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
- 
+
+<script>
+	function prueba(){
+		var Ruta = Routing.generate('addItem');
+		$.ajax({
+			type:"POST",
+			url:Ruta,
+			dataType:'json',
+			async:true,
+			data:{
+				"name": document.getElementById("search").value
+			},
+			success:function(respuesta){
+				window.location.href='{{ path("home",{"filtro": "p"}) }}'
+			},
+			error: function(){
+				console.log("No se proporciono una id");
+			}
+		})
+	}
+</script>
+
+
 	{% if app.request.get("filtro") == "s" or app.request.get("filtro") == "p" or app.request.get("filtro") == "d"%}
  	<script>
 		var Ruta = Routing.generate('getById');
@@ -105,7 +127,7 @@
 				"id": {{app.request.get("id")}}
 			},
 			success:function(respuesta){
-				document.getElementById("item_name").value = respuesta.name;
+						document.getElementById("item_name").value = respuesta.name;
 				document.getElementById("item_checked").value = respuesta.status;
 			},
 			error: function(){
@@ -144,6 +166,7 @@
 		})
 
 		function check(value,id){
+			console.log(value);
 			var Ruta = Routing.generate('checked');
 			$.ajax({
 				type:"POST",
